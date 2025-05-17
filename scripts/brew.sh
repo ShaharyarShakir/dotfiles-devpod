@@ -1,3 +1,5 @@
+#!/bin/bash
+set -e
 if ! command -v brew &> /dev/null
 then 
 echo "Installing Homebrew"
