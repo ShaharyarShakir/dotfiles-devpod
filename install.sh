@@ -2,33 +2,37 @@
 set -e
 
 echo "###########################################"
-echo "Starting installing the dotfiles for DevPod"
+echo "Installing dotfiles and packages for DevPod"
 echo "###########################################"
 echo
 
-# Paths
-PACKAGE_FILE="packages.txt"
-BASHRC_URL="https://raw.githubusercontent.com/ShaharyarShakir/dotfiles/main/bash/.bashrc"
-STARSHIP_URL="https://raw.githubusercontent.com/ShaharyarShakir/dotfiles/main/bash/starship.toml"
-TMUX_CONF_URL="https://raw.githubusercontent.com/ShaharyarShakir/dotfiles/main/tmux/.tmux.conf"
+# Setup XDG_CONFIG_HOME for Neovim and Nix
+export XDG_CONFIG_HOME="$HOME/.config"
+mkdir -p "$XDG_CONFIG_HOME"
+mkdir -p "$XDG_CONFIG_HOME/nixpkgs"
 
-echo "📥 Adding .bashrc from the dotfiles repo"
-curl -fsSL "$BASHRC_URL" -o "$HOME/.bashrc"
+# Symlink dotfiles and configs
+ln -sf "$PWD/nvim" "$XDG_CONFIG_HOME/nvim"
+ln -sf "$PWD/.bash_profile" "$HOME/.bash_profile"
+ln -sf "$PWD/.bashrc" "$HOME/.bashrc"
+ln -sf "$PWD/.inputrc" "$HOME/.inputrc"
+ln -sf "$PWD/.tmux.conf" "$HOME/.tmux.conf"
+ln -sf "$PWD/config.nix" "$XDG_CONFIG_HOME/nixpkgs/config.nix"
 
-# Use Nix if available, else fall back to Homebrew
+# Try installing Nix packages
 if command -v nix &> /dev/null; then
   echo
   echo "###########################################"
-  echo "Installing packages using Nix"
+  echo "Installing packages using Nix (from config.nix)"
   echo "###########################################"
   nix-env -iA nixpkgs.myPackages
 else
   echo
+  echo "⚠️ Nix is not installed. Falling back to Homebrew..."
   echo "###########################################"
-  echo "Nix not found, installing packages with Homebrew"
+  echo "Installing packages using Homebrew"
   echo "###########################################"
 
-  # Define your packages here
   packages=(
     fzf
     zoxide
@@ -51,44 +55,33 @@ else
 fi
 
 echo
-echo "✅ All packages are installed."
+echo "✅ Package installation complete."
 
-# Starship Config
-echo "###########################################"
-echo "Adding starship config"
-echo "###########################################"
+# Starship config
+echo "📦 Setting up starship.toml..."
 mkdir -p "$HOME/.config"
-curl -fsSL "$STARSHIP_URL" -o "$HOME/.config/starship.toml"
-echo
+curl -fsSL "https://raw.githubusercontent.com/ShaharyarShakir/dotfiles/main/bash/starship.toml" -o "$HOME/.config/starship.toml"
 
-# Tmux + TPM
-echo "📦 Installing tmux & TPM..."
-if ! command -v tmux &> /dev/null; then 
-  echo "➤ tmux not found, installing with Homebrew..."
-  brew install tmux
-fi
-
-echo "➤ Downloading .tmux.conf..."
-curl -fsSL "$TMUX_CONF_URL" -o "$HOME/.tmux.conf"
+# Tmux Plugin Manager
+echo "📦 Setting up tmux + TPM..."
+curl -fsSL "https://raw.githubusercontent.com/ShaharyarShakir/dotfiles/main/tmux/.tmux.conf" -o "$HOME/.tmux.conf"
 
 if [ -f scripts/tmux.sh ]; then
-  echo "🚀 Running TPM setup script..."
   bash scripts/tmux.sh
 else
-  echo "❌ scripts/tmux.sh not found! Make sure you're in the right directory."
-  exit 1
+  echo "⚠️ scripts/tmux.sh not found! Skipping TPM setup."
 fi
 
-# LazyVim Setup
+# LazyVim
 echo
-echo "###########################################"
-echo "Installing plugins for Neovim (LazyVim)"
-echo "###########################################"
+echo "🚀 Installing Neovim plugins (LazyVim)..."
 bash scripts/lazyVim.sh
+
 echo
 echo "✅ Dotfile setup completed!"
 echo "➡️ Now running: source ~/.bashrc"
 source "$HOME/.bashrc"
+
 echo "###########################################"
-echo "################ END ######################"
+echo "################ DONE #####################"
 echo "###########################################"
