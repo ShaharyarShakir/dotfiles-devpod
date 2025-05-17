@@ -7,4 +7,4 @@ lazygit
 eza
 bat
 tmux
-curl
+
