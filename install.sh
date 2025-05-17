@@ -15,34 +15,43 @@ TMUX_CONF_URL="https://raw.githubusercontent.com/ShaharyarShakir/dotfiles/main/t
 echo "📥 Adding .bashrc from the dotfiles repo"
 curl -fsSL "$BASHRC_URL" -o "$HOME/.bashrc"
 
-# Install packages
-echo
-echo "###########################################"
-echo "Installing Packages"
-echo "###########################################"
+# Use Nix if available, else fall back to Homebrew
+if command -v nix &> /dev/null; then
+  echo
+  echo "###########################################"
+  echo "Installing packages using Nix"
+  echo "###########################################"
+  nix-env -iA nixpkgs.myPackages
+else
+  echo
+  echo "###########################################"
+  echo "Nix not found, installing packages with Homebrew"
+  echo "###########################################"
 
-if [ ! -f "$PACKAGE_FILE" ]; then
-  echo "❌ $PACKAGE_FILE not found!"
-  exit 1
+  # Define your packages here
+  packages=(
+    fzf
+    zoxide
+    starship
+    ripgrep
+    lazygit
+    eza
+    bat
+    tmux
+  )
+
+  for pkg in "${packages[@]}"; do
+    if brew list --formula | grep -qx "$pkg"; then
+      echo "✔ $pkg is already installed, skipping."
+    else
+      echo "➤ Installing $pkg..."
+      brew install "$pkg"
+    fi
+  done
 fi
 
-echo "📦 Reading packages from $PACKAGE_FILE..."
-
-while IFS= read -r pkg || [[ -n "$pkg" ]]; do
-    # Skip empty lines and comments
-    [[ -z "$pkg" ]] && continue
-    [[ "$pkg" == \#* ]] && continue
-
-    if brew list --formula | grep -q "^${pkg}\$"; then
-        echo "✔ $pkg is already installed, skipping."
-    else
-        echo "➤ Installing $pkg..."
-        brew install "$pkg"
-    fi
-done < "$PACKAGE_FILE"
-
-echo "✅ All packages are installed."
 echo
+echo "✅ All packages are installed."
 
 # Starship Config
 echo "###########################################"
