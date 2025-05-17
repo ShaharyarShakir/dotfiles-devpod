@@ -86,7 +86,7 @@ bash scripts/lazyVim.sh
 echo
 echo "✅ Dotfile setup completed!"
 echo "➡️ Now running: source ~/.bashrc"
-echo source ~/.bashrc
+source "$HOME/.bashrc"
 echo "###########################################"
 echo "################ END ######################"
 echo "###########################################"
