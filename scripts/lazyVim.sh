@@ -1,12 +1,5 @@
 #!/bin/bash
 set -e
-# required
-mv ~/.config/nvim{,.bak}
-
-# optional but recommended
-mv ~/.local/share/nvim{,.bak}
-mv ~/.local/state/nvim{,.bak}
-mv ~/.cache/nvim{,.bak}
 
 echo "📥 Installing LazyVim starter template..."
 git clone https://github.com/LazyVim/starter "$HOME/.config/nvim"
