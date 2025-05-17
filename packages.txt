@@ -1,0 +1,10 @@
+fzf
+zoxide
+starship
+ripgrep
+neovim
+lazygit
+eza
+bat
+tmux
+curl
