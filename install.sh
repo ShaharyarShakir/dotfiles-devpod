@@ -15,13 +15,6 @@ TMUX_CONF_URL="https://raw.githubusercontent.com/ShaharyarShakir/dotfiles/main/t
 echo "📥 Adding .bashrc from the dotfiles repo"
 curl -fsSL "$BASHRC_URL" -o "$HOME/.bashrc"
 
-# Install Homebrew
-echo
-echo "###########################################"
-echo "Installing Homebrew"
-echo "###########################################"
-bash scripts/brew.sh
-
 # Install packages
 echo
 echo "###########################################"
