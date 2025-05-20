@@ -14,7 +14,7 @@ mkdir -p "$XDG_CONFIG_HOME/nixpkgs"
 # Symlink dotfiles and configs
 ln -sf "$PWD/nvim" "$XDG_CONFIG_HOME/nvim"
 ln -sf "$PWD/.bash_profile" "$HOME/.bash_profile"
-ln -sf "$PWD/.bashrc" "$HOME/.bashrc"
+curl -fsSL "https://raw.githubusercontent.com/ShaharyarShakir/dotfiles/main/bash/.bashrc" -o "$HOME/.bashrc"
 ln -sf "$PWD/.inputrc" "$HOME/.inputrc"
 ln -sf "$PWD/.tmux.conf" "$HOME/.tmux.conf"
 ln -sf "$PWD/config.nix" "$XDG_CONFIG_HOME/nixpkgs/config.nix"
@@ -33,6 +33,20 @@ else
   echo "Installing packages using Homebrew"
   echo "###########################################"
 
+  # Setup Homebrew in PATH
+  HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
+  if [ -d "$HOMEBREW_PREFIX" ]; then
+    echo "🔧 Setting up Homebrew in .bashrc..."
+    echo "eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\"" >> "$HOME/.bashrc"
+    eval "$($HOMEBREW_PREFIX/bin/brew shellenv)"
+  fi
+
+  if ! command -v brew &> /dev/null; then
+    echo "❌ brew command still not found, check Homebrew installation path!"
+    exit 1
+  fi
+
+  # Install packages via Homebrew
   packages=(
     fzf
     zoxide
