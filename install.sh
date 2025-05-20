@@ -56,6 +56,7 @@ else
     eza
     bat
     tmux
+    stow
   )
 
   for pkg in "${packages[@]}"; do

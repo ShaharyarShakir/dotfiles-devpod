@@ -11,6 +11,7 @@
         eza
         bat
         tmux
+        stow
       ];
     };
   };
