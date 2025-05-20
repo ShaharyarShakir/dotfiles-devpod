@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 # required
-mkdir -p "$HOME/.config/nvim"
-mv ~/.config/nvim{,.bak}
+rm -rf ~/.config/nvim
+mkdir -p "~/.config/nvim"
 echo "📥 Installing LazyVim starter template..."
 git clone https://github.com/LazyVim/starter "$HOME/.config/nvim"
 
