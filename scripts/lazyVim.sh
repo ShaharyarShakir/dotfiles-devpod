@@ -1,28 +1,33 @@
 #!/bin/bash
 set -e
 
-NVIM_DIR="$HOME/.config/nvim"
+DOTFILES="$HOME/dotfiles"
+LAZYVIM_DIR="$DOTFILES/lazyvim"
+NVIM_DIR="$DOTFILES/nvim"
 
-echo "🔍 Checking if $NVIM_DIR exists..."
+echo "🔍 Checking if LazyVim is already installed..."
 
-if [ -e "$NVIM_DIR" ]; then
-  if [ -f "$NVIM_DIR" ]; then
-    echo "⚠️ $NVIM_DIR is a file. Backing it up and removing..."
-    mv "$NVIM_DIR" "${NVIM_DIR}.bak"
-  elif [ -d "$NVIM_DIR" ]; then
-    echo "⚠️ $NVIM_DIR is a directory. Backing it up to ${NVIM_DIR}.bak"
-    mv "$NVIM_DIR" "${NVIM_DIR}.bak"
-  else
-    echo "⚠️ $NVIM_DIR exists but is not a regular file or directory. Removing it..."
-    rm -rf "$NVIM_DIR"
-  fi
+if [ -d "$LAZYVIM_DIR" ]; then
+  echo "✔ LazyVim directory already exists: $LAZYVIM_DIR"
+else
+  echo "📥 Cloning LazyVim starter template into $LAZYVIM_DIR..."
+  git clone https://github.com/LazyVim/starter "$LAZYVIM_DIR"
+  rm -rf "$LAZYVIM_DIR/.git"
+  echo "✅ LazyVim downloaded."
 fi
 
-echo "📥 Installing LazyVim starter template..."
-git clone https://github.com/LazyVim/starter "$NVIM_DIR"
+echo "🔁 Replacing $NVIM_DIR with symlink to LazyVim..."
 
-echo "🧹 Removing Git history from cloned repo..."
-rm -rf "$NVIM_DIR/.git"
+# Backup existing nvim config if needed
+if [ -L "$NVIM_DIR" ] || [ -d "$NVIM_DIR" ]; then
+  mv "$NVIM_DIR" "${NVIM_DIR}.bak"
+fi
 
-echo "✅ LazyVim installation complete!"
+ln -sfn "$LAZYVIM_DIR" "$NVIM_DIR"
+
+# Re-stow your dotfiles (optional)
+cd "$DOTFILES"
+stow nvim
+
+echo "✅ LazyVim is now set up via Stow!"
 echo "➡️  Launch Neovim with: nvim"
