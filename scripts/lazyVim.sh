@@ -3,9 +3,19 @@ set -e
 
 NVIM_DIR="$HOME/.config/nvim"
 
-if [ -d "$NVIM_DIR" ]; then
-  echo "⚠️ $NVIM_DIR already exists. Backing it up to ${NVIM_DIR}.bak"
-  mv "$NVIM_DIR" "${NVIM_DIR}.bak"
+echo "🔍 Checking if $NVIM_DIR exists..."
+
+if [ -e "$NVIM_DIR" ]; then
+  if [ -f "$NVIM_DIR" ]; then
+    echo "⚠️ $NVIM_DIR is a file. Backing it up and removing..."
+    mv "$NVIM_DIR" "${NVIM_DIR}.bak"
+  elif [ -d "$NVIM_DIR" ]; then
+    echo "⚠️ $NVIM_DIR is a directory. Backing it up to ${NVIM_DIR}.bak"
+    mv "$NVIM_DIR" "${NVIM_DIR}.bak"
+  else
+    echo "⚠️ $NVIM_DIR exists but is not a regular file or directory. Removing it..."
+    rm -rf "$NVIM_DIR"
+  fi
 fi
 
 echo "📥 Installing LazyVim starter template..."
