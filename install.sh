@@ -28,7 +28,6 @@ if command -v nix &> /dev/null; then
   nix-env -iA nixpkgs.myPackages
 else
   echo
-  echo "⚠️ Nix is not installed. Falling back to Homebrew..."
   echo "###########################################"
   echo "Installing packages using Homebrew"
   echo "###########################################"
@@ -56,7 +55,6 @@ else
     eza
     bat
     tmux
-    stow
   )
 
   for pkg in "${packages[@]}"; do
@@ -73,7 +71,11 @@ echo
 echo "✅ Package installation complete."
 
 # Starship config
+echo
+echo "###########################################"
 echo "📦 Setting up starship.toml..."
+echo "###########################################"
+
 mkdir -p "$HOME/.config"
 curl -fsSL "https://raw.githubusercontent.com/ShaharyarShakir/dotfiles/main/bash/starship.toml" -o "$HOME/.config/starship.toml"
 
@@ -89,14 +91,18 @@ fi
 
 # LazyVim
 echo
+echo "###########################################"
 echo "🚀 Installing Neovim plugins (LazyVim)..."
+echo "###########################################"
+
 bash scripts/lazyVim.sh
 
 echo
+echo "###########################################"
 echo "✅ Dotfile setup completed!"
-echo "➡️ Now running: source ~/.bashrc"
+echo "###########################################"
 source "$HOME/.bashrc"
-
+echo
 echo "###########################################"
 echo "################ DONE #####################"
 echo "###########################################"
