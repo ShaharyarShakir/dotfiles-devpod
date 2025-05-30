@@ -55,6 +55,7 @@ else
     eza
     bat
     tmux
+    yazi
   )
 
   for pkg in "${packages[@]}"; do
