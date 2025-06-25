@@ -2,7 +2,6 @@
 return {
   "mikavilpas/yazi.nvim",
   event = "VeryLazy",
-  dependencies = { "folke/snacks.nvim", lazy = true },
   keys = {
     -- 👇 in this section, choose your own keymappings!
     {
