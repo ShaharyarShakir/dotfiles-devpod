@@ -2,9 +2,9 @@
 set -e
 # required
 rm -rf ~/.config/nvim
-mkdir -p ~/.config/nvim
 echo "📥 Installing LazyVim starter template..."
-git clone https://github.com/LazyVim/starter "$HOME/.config/nvim"
+cp -r "$HOME/dotfiles/nvim" "$HOME/.config/nvim"
+ln -s ~/dotfiles/nvim/ ~/.config/
 
 rm -rf "$HOME/.config/nvim/.git"
 
