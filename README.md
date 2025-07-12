@@ -5,7 +5,7 @@
 ## 🔧 Features
 
 - Automatically sets up your development environment with:
-  - Custom `.bashrc`
+  - Custom `.zshrc`
   - Personalized `tmux` configuration
   - Themed `starship` prompt
   - LazyVim configuration

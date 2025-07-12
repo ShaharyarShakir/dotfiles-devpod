@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-
 echo "###########################################"
 echo "Installing dotfiles and packages for DevPod"
 echo "###########################################"
@@ -13,8 +12,12 @@ mkdir -p "$XDG_CONFIG_HOME/nixpkgs"
 
 # Symlink dotfiles and configs
 ln -sf "$PWD/nvim" "$XDG_CONFIG_HOME/nvim"
-ln -sf "$PWD/.bash_profile" "$HOME/.bash_profile"
-curl -fsSL "https://raw.githubusercontent.com/ShaharyarShakir/dotfiles/main/bash/.bashrc" -o "$HOME/.bashrc"
+
+# Set up Zsh config using XDG-style, symlink to ~/.zshrc
+mkdir -p "$HOME/.config/zsh"
+curl -fsSL "https://raw.githubusercontent.com/ShaharyarShakir/dotfiles/refs/heads/main/zsh/.zshrc" -o "$HOME/.config/zsh/.zshrc"
+ln -sf "$HOME/.config/zsh/.zshrc" "$HOME/.zshrc"
+
 ln -sf "$PWD/.inputrc" "$HOME/.inputrc"
 ln -sf "$PWD/.tmux.conf" "$HOME/.tmux.conf"
 ln -sf "$PWD/config.nix" "$XDG_CONFIG_HOME/nixpkgs/config.nix"
@@ -35,8 +38,8 @@ else
   # Setup Homebrew in PATH
   HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
   if [ -d "$HOMEBREW_PREFIX" ]; then
-    echo "🔧 Setting up Homebrew in .bashrc..."
-    echo "eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\"" >> "$HOME/.bashrc"
+    echo "🔧 Setting up Homebrew in .zshrc..."
+    echo "eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\"" >> "$HOME/.config/zsh/.zshrc"
     eval "$($HOMEBREW_PREFIX/bin/brew shellenv)"
   fi
 
@@ -102,7 +105,10 @@ echo
 echo "###########################################"
 echo "✅ Dotfile setup completed!"
 echo "###########################################"
-source "$HOME/.bashrc"
+
+# Source zshrc via symlink
+source "$HOME/.zshrc"
+
 echo
 echo "###########################################"
 echo "################ DONE #####################"
