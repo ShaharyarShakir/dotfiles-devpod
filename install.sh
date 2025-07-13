@@ -14,6 +14,10 @@ mkdir -p "$XDG_CONFIG_HOME/nixpkgs"
 ln -sf "$PWD/nvim" "$XDG_CONFIG_HOME/nvim"
 
 # Set up Zsh config using XDG-style, symlink to ~/.zshrc
+echo "###########################################"
+echo "Installing zsh config && setting it up"
+echo "###########################################"
+
 mkdir -p "$HOME/.config/zsh"
 curl -fsSL "https://raw.githubusercontent.com/ShaharyarShakir/dotfiles/refs/heads/main/zsh/.zshrc" -o "$HOME/.config/zsh/.zshrc"
 ln -sf "$HOME/.config/zsh/.zshrc" "$HOME/.zshrc"
@@ -38,13 +42,13 @@ else
   # Setup Homebrew in PATH
   HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
   if [ -d "$HOMEBREW_PREFIX" ]; then
-    echo "🔧 Setting up Homebrew in .zshrc..."
+    echo "Setting up Homebrew in .zshrc..."
     echo "eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\"" >> "$HOME/.config/zsh/.zshrc"
     eval "$($HOMEBREW_PREFIX/bin/brew shellenv)"
   fi
 
   if ! command -v brew &> /dev/null; then
-    echo "❌ brew command still not found, check Homebrew installation path!"
+    echo "brew command still not found, check Homebrew installation path!"
     exit 1
   fi
 
@@ -71,16 +75,21 @@ else
 fi
 
 echo
-echo "✅ Package installation complete."
+echo "###########################################"
+echo "Package installation complete."
+echo "###########################################"
 
 # Tmux Plugin Manager
-echo "📦 Setting up tmux + TPM..."
+echo "###########################################"
+echo "Setting up tmux + TPM..."
+echo "###########################################"
+
 curl -fsSL "https://raw.githubusercontent.com/ShaharyarShakir/dotfiles/main/tmux/.tmux.conf" -o "$HOME/.tmux.conf"
 
 if [ -f scripts/tmux.sh ]; then
   bash scripts/tmux.sh
 else
-  echo "⚠️ scripts/tmux.sh not found! Skipping TPM setup."
+  echo "scripts/tmux.sh not found! Skipping TPM setup."
 fi
 
 # LazyVim
@@ -93,7 +102,7 @@ bash scripts/lazyVim.sh
 
 echo
 echo "###########################################"
-echo "✅ Dotfile setup completed!"
+echo "Dotfile setup completed!"
 echo "###########################################"
 
 # Source zshrc via symlink
