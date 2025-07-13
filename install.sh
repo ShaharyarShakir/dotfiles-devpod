@@ -52,7 +52,6 @@ else
   packages=(
     fzf
     zoxide
-    starship
     ripgrep
     lazygit
     eza
@@ -73,8 +72,6 @@ fi
 
 echo
 echo "✅ Package installation complete."
-
-
 
 # Tmux Plugin Manager
 echo "📦 Setting up tmux + TPM..."
