@@ -74,14 +74,7 @@ fi
 echo
 echo "✅ Package installation complete."
 
-# Starship config
-echo
-echo "###########################################"
-echo "📦 Setting up starship.toml..."
-echo "###########################################"
 
-mkdir -p "$HOME/.config"
-curl -fsSL "https://raw.githubusercontent.com/ShaharyarShakir/dotfiles/main/bash/starship.toml" -o "$HOME/.config/starship.toml"
 
 # Tmux Plugin Manager
 echo "📦 Setting up tmux + TPM..."
